@@ -105,3 +105,5 @@ map ,e :e <C-R>=expand("%:p:h") . "/" <CR>
 else
 map ,e :e <C-R>=expand("%:p:h") . "\" <CR>
 endif
+
+map <C-v> "+gP
