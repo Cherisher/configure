@@ -1,109 +1,168 @@
-﻿" When started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim"
-finish
-endif
-
-set nocompatible
-
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-set nobackup   " do not keep a backup file, use versions instead
-set ruler   " show the cursor position all the time
-set showcmd   " display incomplete commands
-
-" In many terminal emulators the mouse works just fine, thus enable it.
+﻿set nu
+set history=50
 set mouse=a
+filetype plugin on
+filetype indent on
 
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
-filetype plugin indent on
-augroup vimrcEx
-au!
-" For all text files set 'textwidth' to 78 characters.
-autocmd FileType text setlocal textwidth=78
-autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
-augroup END
-else
-set autoindent   " always set autoindenting on
-endif " has("autocmd")
+set autoread
 
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-\ | wincmd p | diffthis
-\ | wincmd p | diffthis
-
-set guioptions-=T
-
-"Set mapleader
 let mapleader = ","
 let g:mapleader = ","
 
-"设置字体
-set guifont=Monaco\ :h12
+" Fast saving
+nmap <leader>w :w!<cr>
 
-"显示行号
-set nu
+set so=7
 
-"打开语法高亮
-syntax on
+set wildmenu
 
-set softtabstop=4
-"Windows
-set shiftwidth=4 "缩进的空格数
-set tabstop=4	"制表符的宽度
-"Linux/Unix
-"set shiftwidth=4
-"set tabstop=8
+set wildignore=*.o,*~,*.pyc
 
-"自动缩进设置
-set cindent "C预言缩进方式
-set smartindent
-set incsearch
-set autoindent "自动缩进
+" Always show current position
+set ruler
 
-"Show matching bracets
-set showmatch
+" Height of the command bar
+set cmdheight=2
 
-"Set to auto read when a file is changed from the outside
-set autoread
+" A buffer becomes hidden when it is abandoned
+set hid
 
-"设置配色方案为torte
-colo torte
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
 
-"设置支持的文件编码类项，目前设置为utf-8和gbk两种类型
-set fileencodings=utf-8,chinese
+" Ignore case when searching
+set ignorecase
+" When searching try to be smart about cases
+set smartcase
 
-"设置搜索结果高亮显示
+" Highlight search results
 set hlsearch
 
-"设置记录的历史操作列表
-set history=50
+" Don't redraw while executing macros(good performance config)
+set lazyredraw
 
-"设置折叠
-"set foldcolumn=2
-"set foldmethod=indent
-"set foldlevel=3
+" For regular expression turn magic on
+set magic
 
-"新建文件后，自动定位到文件末尾
-autocmd BufNewFile * normal G
+" Show matching brackets when text indicator is over the
+" 设置匹配模式，类似当输入一个左括号时会匹配相应的那个右括号
+set showmatch
+" How many tenehs of a second to blink when matching brackets
+set mat=2
 
-"绑定自动补全的快捷键<C-X><C-O>到<leader>;
-imap <leader>; <C-X><C-O>
-"设置tab操作的快捷键，绑定:tabnew到<leader>t，绑定:tabn, :tabp到<leader>n,
-"<leader>p
-map <leader>t :tabnew<CR>
-map <leader>n :tabn<CR>
-map <leader>p :tabp<CR>
+" No annoying sound on errors
+set noerrorbells
+set novisualbell
+" 当vim进行编辑时，如果命令错误，会发出一个响声，该设置去掉响声
+set t_vb=
 
-"使用<leader>e打开当前文件同目录中的文件
-if has("unix")
-map ,e :e <C-R>=expand("%:p:h") . "/" <CR>
-else
-map ,e :e <C-R>=expand("%:p:h") . "\" <CR>
+set tm=500
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colors and Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Enable syntax highlighting
+syntax on
+
+colorscheme desert
+set background=dark
+
+" Set extra options when runing in GUI mode
+if has("gui_running")
+	set guioptions-=T
+	set guioptions+=e
+	set t_Co=256
+	set guitablabel=%M\ &t
 endif
 
-map <C-v> "+gP
+" Set utf8 as standard encoding and Chinese as the standard language
+set encoding=utf8
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""'""""""""
+" => Files, backups and undo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Turn backup off , since most stuff is in SVN, git et.c anyway...
+set nobackup
+set nowb
+set noswapfile
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Use spaces instead of tabs
+set expandtab
+
+" Be smart when using tabs
+set smarttab
+
+set shiftwidth=4
+set tabstop=4
+
+" Linebreak on 500 characters
+set lbr
+set tw=500
+
+" Auto indent
+set ai 
+" Smart indent
+set si
+" Wrap lines
+set wrap
+
+
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+" Close the current buffer
+map <leader>ba :Bclose<cr>
+
+" Close all the buffers
+map <leader>ba :1,1000 bd!<cr>
+
+" Return to last edit position when opening files
+autocmd BufReadPost *
+	\ if line("'\"") > 0 && line("'\"") <= line("$")|
+	\ exe "normal! g`\"" |
+	\ endif
+" Remeber info about open buffers on close
+set viminfo^=%
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Status line
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Always show the status line
+set laststatus=2
+
+" Format the status line
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l-%c
+
+" Delete trailing white space on save, useful for Python and CoffeeScript
+func! DeleteTrailingWS()
+    exe "normal mz"
+    %s/\s+$//ge
+    exe "normal `z"
+endfunc
+autocmd BufWrite *.py :call DeleteTrailingWS()
+autocmd BufWrite *.coffee :call DeleteTrailingWS()
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Helper functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    en
+    return ''
+endfunction
