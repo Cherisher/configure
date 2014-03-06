@@ -3,7 +3,8 @@ set history=50
 set mouse=a
 filetype plugin on
 filetype indent on
-
+nnoremap <silent> <F3> :Grep<CR>
+nnoremap <silent> <F12> :A<CR> 
 set autoread
 
 let mapleader = ","
@@ -46,7 +47,6 @@ set lazyredraw
 set magic
 
 " Show matching brackets when text indicator is over the
-" 设置匹配模式，类似当输入一个左括号时会匹配相应的那个右括号
 set showmatch
 " How many tenehs of a second to blink when matching brackets
 set mat=2
@@ -54,8 +54,6 @@ set mat=2
 " No annoying sound on errors
 set noerrorbells
 set novisualbell
-" 当vim进行编辑时，如果命令错误，会发出一个响声，该设置去掉响声
-set t_vb=
 
 set tm=500
 
@@ -67,9 +65,9 @@ set tm=500
 " Enable syntax highlighting
 syntax on
 
-colorscheme desert
+colorscheme evening
 set background=dark
-
+set guifont=Consolas:h14
 " Set extra options when runing in GUI mode
 if has("gui_running")
 	set guioptions-=T
@@ -79,10 +77,14 @@ if has("gui_running")
 endif
 
 " Set utf8 as standard encoding and Chinese as the standard language
-set encoding=utf8
-
+set fileencodings=ucs-bom,utf-8,chinese
+set fileencoding=utf-8
+set termencoding=utf8
+set encoding=chinese
+set fenc=utf-8
 " Use Unix as the standard file type
-set ffs=unix,dos,mac
+set ffs=unix ",dos,mac
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""'""""""""
 " => Files, backups and undo
@@ -111,7 +113,7 @@ set lbr
 set tw=500
 
 " Auto indent
-set ai 
+set ai
 " Smart indent
 set si
 " Wrap lines
@@ -122,7 +124,8 @@ map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
-
+let mapleader=","
+map <leader>m :%s/\r//g<cr>
 " Close the current buffer
 map <leader>ba :Bclose<cr>
 
